@@ -85,8 +85,6 @@ namespace EF_core
                         }
 
                         break;
-                    case "0":
-                        break;
                 }
             }
         }
