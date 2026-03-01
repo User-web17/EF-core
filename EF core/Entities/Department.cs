@@ -4,17 +4,17 @@ using System.Text;
 
 namespace EF_core.Entities
 {
-    public class Subject
+    public class Department
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public List<Teacher> Teachers { get; set; } = null!;
-        public int DepartmentId { get; set; }
-        public Department Department { get; set; } = null!;
+        public List<Subject> Subjects { get; set; } = null!;
+
         public override string ToString()
         {
-            return $"{Id} | {Name} | {Description} | Teacher count: {Teachers.Count}";
+            return $"{Id} | {Name} | {Description} | Teachers count: {Teachers.Count} | Subjects count: {Subjects.Count}";
         }
     }
 }

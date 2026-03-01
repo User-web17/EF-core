@@ -13,6 +13,8 @@ namespace EF_core.Entities
         public decimal Salary { get; set; }
         public List<Group> Groups { get; set; } = null!;
         public List<Subject> Subjects { get; set; } = null!;
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; } = null!;
         public override string ToString()
         {
             return $"{Id} | {FirstName} | {LastName} | {Salary} |" +
