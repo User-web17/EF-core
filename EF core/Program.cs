@@ -1,5 +1,6 @@
 ﻿using EF_core.Contexts;
 using EF_core.Entities;
+using EF_core.Migrations;
 using Microsoft.IdentityModel.Tokens;
 using System.Xml.Serialization;
 
@@ -10,83 +11,58 @@ namespace EF_core
         static AppDbContext db = new AppDbContext();
         static void Main(string[] args)
         {
-            try
+            
+        }
+
+        static void ChangeStudent(AppDbContext context)
+        {
+            Console.Write("Enter student id: ");
+            int id = int.Parse(Console.ReadLine()!);
+
+            Student? student = context.Students.FirstOrDefault(x => x.Id == id);
+
+            if (student != null)
             {
-                Menu();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
+                Console.WriteLine("Enter new first name: ");
+
+                string? temp = Console.ReadLine();
+                student.FirstName = (temp.IsNullOrEmpty() ? student.FirstName : temp)!;
+
+                Console.WriteLine("Enter new last name: ");
+                temp = Console.ReadLine();
+                student.LastName = (temp.IsNullOrEmpty() ? student.LastName : temp)!;
+
+                Console.WriteLine("Enter new email: ");
+                temp = Console.ReadLine();
+                student.Email = (temp.IsNullOrEmpty() ? student.Email : temp)!;
+
+                Console.WriteLine("Enter new birth date: ");
+                string? newBirthDate = Console.ReadLine();
+                if (!newBirthDate.IsNullOrEmpty())
+                {
+                    student.BirthDate = DateTime.Parse(newBirthDate!);
+                }
+                context.SaveChanges();
             }
         }
 
-        public static void Menu()
+        static void DeleteSudent(AppDbContext context)
         {
-            while (true)
+            Console.WriteLine("Enter Student Id: ");
+            int id = Int32.Parse(Console.ReadLine()!);
+            Student st = db.Students.FirstOrDefault(x => x.Id == id)!;
+
+            if (st != null)
             {
-                Console.WriteLine("1. Create Student");
-                Console.WriteLine("2. Create Teacher");
-                Console.WriteLine("3. Show Students");
-                Console.WriteLine("4. Show Teachers");
-                Console.WriteLine("0. Exit");
-                Console.Write("Enter: ");
-                string choice = Console.ReadLine()!;
-
-                if (string.IsNullOrEmpty(choice))
-                {
-                    throw new Exception();
-                }
-
-                switch (choice)
-                {
-                    case "1":
-                        Student student = new Student()
-                        {
-                            FirstName = Console.ReadLine()!,
-                            LastName = Console.ReadLine()!,
-                            BirthDate = DateTime.Parse(Console.ReadLine()!),
-                            Email = Console.ReadLine()!
-                        };
-
-                        db.Students.Add(student);
-                        db.SaveChanges();
-                        break;
-                    case "2":
-                        Teacher teacher = new Teacher()
-                        {
-                            FirstName = Console.ReadLine()!,
-                            LastName = Console.ReadLine()!,
-                            BirthDate = DateTime.Parse(Console.ReadLine()!),
-                            Salary = Decimal.Parse(Console.ReadLine()!)
-                        };
-
-                        db.Teachers.Add(teacher);
-                        db.SaveChanges();
-                        break;
-                    case "3":
-                        var students = db.Students.ToList();
-
-                        foreach (var student1 in students)
-                        {
-                            Console.WriteLine($"--- Student ---\n Id: {student1.Id}\n Name: {student1.FirstName}\n " +
-                                $"Surname: {student1.LastName}\n Birth Date: {student1.BirthDate.ToString()}\n " +
-                                $"Email: {student1.Email}\n");
-                        }
-
-                        break;
-                    case "4":
-                        var teachers = db.Teachers.ToList();
-
-                        foreach (var teacher1 in teachers)
-                        {
-                            Console.WriteLine($"--- Teacher ---\n Id: {teacher1.Id}\n Name: {teacher1.FirstName}\n " +
-                                $"Surname: {teacher1.LastName}\n Birth Date: {teacher1.BirthDate.ToString()}\n " +
-                                $"Salary: {teacher1.Salary}\n");
-                        }
-
-                        break;
-                }
+                db.Students.Remove(st);
             }
+
+            context.SaveChanges();
+        }
+
+        static void AddStudent(AppDbContext context)
+        {
+
         }
     }
 }
